@@ -1,0 +1,30 @@
+PREFIX sbuf: <http://sbuf.org/grasshopper#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+#query all default grasshopper triples
+SELECT ?property ?item ?value
+WHERE {
+  sbuf:Default ?property [?item ?value]
+}
+
+#select setup data
+SELECT ?property ?item ?value
+WHERE {
+  sbuf:Default ?property [?item ?value].
+  sbuf:Default ?property [sbuf:GroupTag "Setup"].
+}
+
+#query default PlaceGeometry values
+SELECT ?property ?item ?value
+WHERE {
+  sbuf:Default ?property [?item ?value].
+  sbuf:Default ?property [sbuf:GroupTag "PlaceGeometry"].
+}
+
+#query the group options
+SELECT Distinct ?group
+WHERE {
+  sbuf:Default ?property [sbuf:GroupTag ?group].
+}

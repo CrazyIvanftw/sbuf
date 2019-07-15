@@ -1,0 +1,76 @@
+PREFIX sbuf: <http://sbuf-definitions.com/construction-robot/grasshopper#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+INSERT DATA {
+sbuf:Setup  sbuf:Property sbuf:DropDistance;
+            sbuf:Property sbuf:VerticalMargin;
+            sbuf:Property sbuf:PodiumHeight;
+            sbuf:Property sbuf:Robot;
+            sbuf:L-Property sbuf:BrickSize;
+            sbuf:LL-Property sbuf:Speeds;
+            sbuf:L-Property sbuf:Zones;
+            sbuf:Property sbuf:WaitTime;
+            sbuf:Property sbuf:GripperCloseTime.
+sbuf:Tool   sbuf:Property sbuf:GripMargin;
+            sbuf:L-Property sbuf:ToolWeight.
+sbuf:PickGeometry sbuf:Alt sbuf:SimpleStack;
+                  sbuf:Alt sbuf:PickByVision.
+sbuf:PlaceGeometry sbuf:Alt sbuf:Förband;
+                  sbuf:Alt sbuf:Qirui.
+sbuf:SimpleStack  sbuf:Property sbuf:DistanceBetweenBricks;
+                  sbuf:L-Property sbuf:SimpleStackNumberOfBricks;
+                  sbuf:L-Property sbuf:SimpleStackReferencePoint.
+sbuf:PickByVision sbuf:Property sbuf:Ip;
+                  sbuf:Property sbuf:Port;
+                  sbuf:Property sbuf:Pattern;
+                  sbuf:Property sbuf:UpperLimitID;
+                  sbuf:Property sbuf:LowerLimitID;
+                  sbuf:L-Property sbuf:Matrix4x4;
+                  sbuf:Property sbuf:Z-Stenhöjd;
+                  sbuf:Property sbuf:PickByVisionAngle.
+sbuf:Förband      sbuf:L-Property sbuf:SeamSize;
+                  sbuf:Property sbuf:PartSizeOfOneBrickMoved;
+                  sbuf:L-Property sbuf:FörbandNumberOfBricks;
+                  sbuf:L-Property sbuf:FörbandReferencePoint.
+sbuf:Qirui        sbuf:Property sbuf:Z-Margin;
+                  sbuf:Property sbuf:AngleToRotate;
+                  sbuf:Property sbuf:NumberOfBricksToMoveUpwards;
+                  sbuf:L-Property sbuf:QiruiReferencePoint;
+                  sbuf:Property sbuf:NumberOfBricksAlreadyLayed.
+sbuf:Saves sbuf:SaveID sbuf:Default.
+sbuf:Default   sbuf:DropDistance "10";
+    		    sbuf:VerticalMargin "60";
+    		    sbuf:PodiumHeight "300";
+            sbuf:Robot "LTH-IRB2400";
+            sbuf:BrickSize ("230" "110" "55");
+            sbuf:Speeds (("1000" "2") ("2000" "2") ("350" "1"));
+            sbuf:Zones  ("50" "2" "0");
+            sbuf:WaitTime "0.6";
+            sbuf:GripperCloseTime "0.4";
+
+            sbuf:GripMargin "20";
+            sbuf:ToolWeight ("5.0" "6.5");
+
+            sbuf:DistanceBetweenBricks "10";
+            sbuf:SimpleStackNumberOfBricks ("3" "3");
+            sbuf:SimpleStackReferencePoint ("600.00" "-760.00" "385.00");
+
+            sbuf:Ip "127.0.0.1";
+            sbuf:Port "3333";
+            sbuf:Pattern "999";
+            sbuf:UpperLimitID "10";
+            sbuf:LowerLimitID "120";
+            sbuf:Matrix4x4 (  "r1c1" "r1c2" "r1c3" "r1c4" "r2c1" "r2c2" "r2c3" "r2c4" "r3c1" "r3c2" "r3c3" "r3c4" "r4c1" "r4c2" "r4c3" "r4c4");
+            sbuf:Z-Stenhöjd "516.8";
+            sbuf:PickByVisionAngle "35.3";
+            sbuf:SeamSize ("10" "0" "0");
+            sbuf:PartSizeOfOneBrickMoved "0.25";
+            sbuf:FörbandNumberOfBricks ("3" "3");
+            sbuf:FörbandReferencePoint ("595.24" "727.44" "385.00");
+            sbuf:Z-Margin "5";
+            sbuf:AngleToRotate "0.546";
+            sbuf:NumberOfBricksToMoveUpwards "0";
+            sbuf:QiruiReferencePoint ("595.24" "727.44" "385.00");
+            sbuf:NumberOfBricksAlreadyLayed "0".
+}
