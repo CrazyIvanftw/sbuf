@@ -3,6 +3,12 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
+# This file has some useful example of how to query and update the database.
+# Each statement below will probably need the prefixes defined above when you
+# run them via the workbench or some client program. 
+
+
+
 # Query all default grasshopper triples
 # This statement will simply dump ALL of the triples in the database.
 # It's not very useful, but sometimes it's nice to see everything.
