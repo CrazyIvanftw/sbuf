@@ -1,0 +1,135 @@
+PREFIX sbuf: <http://sbuf.org/grasshopper#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+#Sbuf Database initiation script
+#This SPARQL statement will define a few relations for the purposes of the data structure
+#then it will add the triples for the default settings of the grasshopper program.
+INSERT DATA {
+
+# All of the safed configurations will be kept in a graph called "sbuf:GrasshopperConfigurations".
+GRAPH <sbuf:GrasshopperConfigurations>{
+
+#Tag definition
+#In grasshopper, the modules are divided into groupings (e.g. Setup, Pick and place, etc.).
+#Because such groupings can be added or changed, I decided to use tags to deal with groupings.
+#For example, in grasshopper, the attribute called "Tool weight unloaded"
+#is a part of the "setup" and "tool" groups, the entries in the database are tagged "Setup" and "Tool"
+sbuf:GroupName rdf:type xsd:string .
+sbuf:GroupTag rdfs:range sbuf:GroupName .
+
+
+
+#-----------------------------------
+# START DATA STRUCTURE
+#-----------------------------------
+
+#This section defines the data structure. For every grasshopper attribute
+#(like Drop Distance) it forces the rdf predicate for it (sbuf:DropDistance) to
+#be attached to a subject of type sbuf:FileName.
+
+#Setup
+sbuf:DropDistance rdfs:domain sbuf:FileName .
+sbuf:VerticalMargin rdfs:domain sbuf:FileName .
+sbuf:PodiumHeight rdfs:domain sbuf:FileName .
+sbuf:Robot rdfs:domain sbuf:FileName .
+sbuf:BrickSize rdfs:domain sbuf:FileName .
+sbuf:Speeds rdfs:domain sbuf:FileName .
+sbuf:Zones rdfs:domain sbuf:FileName .
+sbuf:WaitTime rdfs:domain sbuf:FileName .
+sbuf:GripperCloseTime rdfs:domain sbuf:FileName.
+
+#Tool
+sbuf:GripMargin rdfs:domain sbuf:FileName .
+sbuf:ToolWeight rdfs:domain sbuf:FileName.
+
+#SimpleStack
+sbuf:DistanceBetweenBricks rdfs:domain sbuf:FileName .
+sbuf:SimpleStackNumberOfBricks rdfs:domain sbuf:FileName .
+sbuf:SimpleStackReferencePoint rdfs:domain sbuf:FileName.
+
+#PickByVision
+sbuf:Ip rdfs:domain sbuf:FileName .
+sbuf:Port rdfs:domain sbuf:FileName .
+sbuf:Pattern rdfs:domain sbuf:FileName .
+sbuf:UpperLimitID rdfs:domain sbuf:FileName .
+sbuf:LowerLimitID rdfs:domain sbuf:FileName .
+sbuf:Matrix4x4 rdfs:domain sbuf:FileName .
+sbuf:Z-Stenhöjd rdfs:domain sbuf:FileName .
+sbuf:PickByVisionAngle rdfs:domain sbuf:FileName.
+
+#Förband
+sbuf:SeamSize rdfs:domain sbuf:FileName .
+sbuf:PartSizeOfOneBrickMoved rdfs:domain sbuf:FileName .
+sbuf:FörbandNumberOfBricks rdfs:domain sbuf:FileName .
+sbuf:FörbandReferencePoint rdfs:domain sbuf:FileName.
+
+#Qirui
+sbuf:Z-Margin rdfs:domain sbuf:FileName .
+sbuf:AngleToRotate rdfs:domain sbuf:FileName .
+sbuf:NumberOfBricksToMoveUpwards rdfs:domain sbuf:FileName .
+sbuf:QiruiReferencePoint rdfs:domain sbuf:FileName .
+sbuf:NumberOfBricksAlreadyLayed rdfs:domain sbuf:FileName.
+
+#-----------------------------------
+# END DATA STRUCTURE
+#-----------------------------------
+
+
+#-----------------------------------
+# START DEFAULT DATA ENTRY
+#-----------------------------------
+
+#Counter
+sbuf:Default  sbuf:Counter [ rdf:value "0"^^xsd:integer ; sbuf:units "Integer"^^xsd:string ; sbuf:GroupTag "Counter" ] .
+
+#Setup
+sbuf:Default  sbuf:DropDistance [ rdf:value "10"^^xsd:integer ; sbuf:units "mm"^^xsd:string ; sbuf:GroupTag "Setup" ] ;
+              sbuf:VerticalMargin [ rdf:value "60"^^xsd:integer ; sbuf:units "mm"^^xsd:string ; sbuf:GroupTag "Setup" ] ;
+              sbuf:PodiumHeight [ rdf:value "300"^^xsd:integer ; sbuf:units "mm"^^xsd:string ; sbuf:GroupTag "Setup" ] ;
+              sbuf:Robot [ rdf:value "LTH-IRB2400"^^xsd:string ; sbuf:GroupTag "Setup" ] ;
+              sbuf:BrickSize [ sbuf:X "230.0"^^xsd:double ; sbuf:Y "110.0"^^xsd:double ; sbuf:Z "55.0"^^xsd:double ; sbuf:units "mm"^^xsd:string ; sbuf:GroupTag "Setup" ] ;
+              sbuf:Speeds [ sbuf:LinearSpeed0 "1000.0"^^xsd:double ; sbuf:AngularSpeed0 "2.0"^^xsd:double ; sbuf:LinearSpeed1 "2000.0"^^xsd:double ; sbuf:AngularSpeed1 "2.0"^^xsd:double ; sbuf:LinearSpeed2 "350.0"^^xsd:double ; sbuf:AngularSpeed2 "1.0"^^xsd:double ; sbuf:units "mm/s"^^xsd:string ; sbuf:units "rad/s"^^xsd:string ; sbuf:GroupTag "Setup" ] ;
+              sbuf:Zones [sbuf:list0 "50"^^xsd:integer ; sbuf:list1 "2"^^xsd:integer ; sbuf:list2 "0"^^xsd:integer ; sbuf:units "mm?"^^xsd:string ; sbuf:GroupTag "Setup" ] ;
+              sbuf:WaitTime [ rdf:value "0.6"^^xsd:double ; sbuf:units "s?"^^xsd:string ; sbuf:GroupTag "Setup" ] ;
+              sbuf:GripperCloseTime [ rdf:value "0.4"^^xsd:double ; sbuf:units "s?"^^xsd:string ; sbuf:GroupTag "Setup" ] .
+
+#Tool
+sbuf:Default  sbuf:GripMargin [ rdf:value "20.0"^^xsd:integer ; sbuf:units "mm?"^^xsd:string ; sbuf:GroupTag "Tool" ; sbuf:GroupTag "Setup" ];
+              sbuf:ToolWeightUnloaded [ rdf:value "5.0"^^xsd:double ; sbuf:units "kg"^^xsd:string ; sbuf:GroupTag "Tool" ; sbuf:GroupTag "Setup" ; sbuf:GroupTag "ToolWeight" ];
+              sbuf:ToolWeightLoaded [ rdf:value "6.5"^^xsd:double ; sbuf:units "kg"^^xsd:string ; sbuf:GroupTag "Tool" ; sbuf:GroupTag "Setup" ; sbuf:GroupTag "ToolWeight" ].
+
+
+#SimpleStack
+sbuf:Default    sbuf:DistanceBetweenBricks [ rdf:value "10.0"^^xsd:integer ; sbuf:units "mm"^^xsd:string ; sbuf:GroupTag "PickGeometry" ; sbuf:GroupTag "SimpleStack" ];
+                sbuf:SimpleStackNumberOfBricks [ sbuf:X "3.0"^^xsd:integer ; sbuf:Y "3.0"^^xsd:integer ; sbuf:units "Number of Bricks"^^xsd:string ; sbuf:GroupTag "PickGeometry" ; sbuf:GroupTag "SimpleStack" ];
+                sbuf:SimpleStackReferencePoint [ sbuf:X "600.0"^^xsd:double ; sbuf:Y "-760.0"^^xsd:double ; sbuf:Z "385.0"^^xsd:double ; sbuf:units "mm"^^xsd:string ; sbuf:GroupTag "PickGeometry" ; sbuf:GroupTag "SimpleStack" ] .
+
+#PickByVision
+sbuf:Default    sbuf:Ip [ rdf:value "127.0.0.1"^^xsd:string ;  sbuf:units "IP Address"^^xsd:string ; sbuf:GroupTag "PickGeometry" ; sbuf:GroupTag "PickByVision"  ] ;
+                sbuf:Port [ rdf:value "3333"^^xsd:string ;  sbuf:units "Port Number"^^xsd:string ; sbuf:GroupTag "PickGeometry" ; sbuf:GroupTag "PickByVision"  ] ;
+                sbuf:Pattern [ rdf:value "999"^^xsd:string ;  sbuf:units "Pattern"^^xsd:string ; sbuf:GroupTag "PickGeometry" ; sbuf:GroupTag "PickByVision"  ] ;
+                sbuf:UpperLimitID [ rdf:value "10.0"^^xsd:integer ;  sbuf:units "Upper Limit ID"^^xsd:string ; sbuf:GroupTag "PickGeometry" ; sbuf:GroupTag "PickByVision"  ] ;
+                sbuf:LowerLimitID [ rdf:value "120.0"^^xsd:integer ;  sbuf:units "Lower Limit ID"^^xsd:string ; sbuf:GroupTag "PickGeometry" ; sbuf:GroupTag "PickByVision"  ] ;
+                sbuf:Matrix4x4 [  sbuf:r1c1 "10.0"^^xsd:double ; sbuf:r1c2 "10.0"^^xsd:double ; sbuf:r1c3 "10.0"^^xsd:double ; sbuf:r1c4 "10.0"^^xsd:double ;  sbuf:r2c1 "10.0"^^xsd:double ; sbuf:r2c2 "10.0"^^xsd:double ; sbuf:r2c3 "10.0"^^xsd:double ; sbuf:r2c4 "10.0"^^xsd:double ;  sbuf:r3c1 "10.0"^^xsd:double ; sbuf:r3c2 "10.0"^^xsd:double ; sbuf:r3c3 "10.0"^^xsd:double ; sbuf:r3c4 "10.0"^^xsd:double ;  sbuf:r4c1 "10.0"^^xsd:double ; sbuf:r4c2 "10.0"^^xsd:double ; sbuf:r4c3 "10.0"^^xsd:double ; sbuf:r4c4 "10.0"^^xsd:double ;  sbuf:GroupTag "PickGeometry" ; sbuf:GroupTag "PickByVision"  ] ;
+                sbuf:Z-Stenhöjd [ rdf:value "516.8"^^xsd:double ;  sbuf:units "mm?"^^xsd:string ; sbuf:GroupTag "PickGeometry" ; sbuf:GroupTag "PickByVision"  ] ;
+                sbuf:PickByVisionAngle [ rdf:value "35.3"^^xsd:double ;  sbuf:units "degrees?"^^xsd:string ; sbuf:GroupTag "PickGeometry" ; sbuf:GroupTag "PickByVision"  ] .
+
+#Förband
+sbuf:Default    sbuf:SeamSize [ sbuf:list0 "10.0"^^xsd:integer ; sbuf:list1 "0.0"^^xsd:integer ; sbuf:list2 "0.0"^^xsd:integer ;  sbuf:units "mm?"^^xsd:string ; sbuf:GroupTag "PlaceGeometry" ; sbuf:GroupTag "Förband"  ] ;
+                sbuf:PartSizeOfOneBrickMoved [ rdf:value "0.25"^^xsd:double ;  sbuf:units "mm?"^^xsd:string ; sbuf:GroupTag "PlaceGeometry" ; sbuf:GroupTag "Förband"  ] ;
+                sbuf:FörbandNumberOfBricks [ sbuf:X "3.0"^^xsd:integer ; sbuf:Y "3.0"^^xsd:integer ; sbuf:units "Number of Bricks"^^xsd:string ; sbuf:GroupTag "PlaceGeometry" ; sbuf:GroupTag "Förband" ];
+                sbuf:FörbandReferencePoint [ sbuf:X "595.24"^^xsd:double ; sbuf:Y "727.44"^^xsd:double ; sbuf:Z "385.00"^^xsd:double ; sbuf:units "mm"^^xsd:string ; sbuf:GroupTag "PlaceGeometry" ; sbuf:GroupTag "Förband" ].
+
+#Qirui
+sbuf:Default    sbuf:Z-Margin  [ rdf:value "5.0"^^xsd:integer ;  sbuf:units "mm?"^^xsd:string ; sbuf:GroupTag "PlaceGeometry" ; sbuf:GroupTag "Qirui"  ] ;
+                sbuf:AngleToRotate [ rdf:value "0.546"^^xsd:integer ;  sbuf:units "degrees?"^^xsd:string ; sbuf:GroupTag "PlaceGeometry" ; sbuf:GroupTag "Qirui"  ] ;
+                sbuf:NumberOfBricksToMoveUpwards [ rdf:value "0.0"^^xsd:integer ;  sbuf:units "Number of Bricks"^^xsd:string ; sbuf:GroupTag "PlaceGeometry" ; sbuf:GroupTag "Qirui"  ] ;
+                sbuf:QiruiReferencePoint [ sbuf:X "595.24"^^xsd:double ; sbuf:Y "727.44"^^xsd:double ; sbuf:Z "385.00"^^xsd:double ; sbuf:units "mm"^^xsd:string ; sbuf:GroupTag "PlaceGeometry" ; sbuf:GroupTag "Qirui" ];
+                sbuf:NumberOfBricksAlreadyLayed [ rdf:value "0"^^xsd:integer ;  sbuf:units "Number of Bricks"^^xsd:string ; sbuf:GroupTag "PlaceGeometry" ; sbuf:GroupTag "Qirui"  ] .
+}
+}
+#-----------------------------------
+# END DEFAULT DATA ENTRY
+#-----------------------------------

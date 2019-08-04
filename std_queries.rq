@@ -3,28 +3,54 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
-#query all default grasshopper triples
+# Query all default grasshopper triples
+# This statement will simply dump ALL of the triples in the database.
+# It's not very useful, but sometimes it's nice to see everything.
 SELECT ?property ?item ?value
 WHERE {
   sbuf:Default ?property [?item ?value]
 }
 
-#select setup data
+# Select setup data
+# This statement will return ALL the default data for the grasshopper group "Setup".
+# This return will include all of the database tags and side info. If you only want
+# the numbers to put into grasshopper, you can change ?item to rdf:value.
 SELECT ?property ?item ?value
 WHERE {
   sbuf:Default ?property [?item ?value].
   sbuf:Default ?property [sbuf:GroupTag "Setup"].
 }
 
-#query default PlaceGeometry values
+# Query default PlaceGeometry values
+# This statement will return ALL the default data for the grasshopper group "Place Geometry".
+# This return will include all of the database tags and side info. If you only want
+# the numbers to put into grasshopper, you can change ?item to rdf:value.
 SELECT ?property ?item ?value
 WHERE {
   sbuf:Default ?property [?item ?value].
   sbuf:Default ?property [sbuf:GroupTag "PlaceGeometry"].
 }
 
-#query the group options
+# Query the group options
+# This will return a list of all the group tags in the databse. This list
+# could be useful if you're looking for something in particular but you don't
+# know exactly what tag to look for.
 SELECT Distinct ?group
 WHERE {
   sbuf:Default ?property [sbuf:GroupTag ?group].
+}
+
+# Incriment Counter
+# This statement will update the value of the default counter. Unfortunately,
+# SPARQL does not have a dedicated update statement, so to update anything, you
+# have to delete the first value and in insert the new value. This statement
+# takes some of the headache out of that process by doing the increment in the
+# SPARQL command.
+WITH <sbuf:GrasshopperConfigurations>
+DELETE { ?node rdf:value ?val }
+INSERT { ?node rdf:value ?newval }
+WHERE {
+  sbuf:Default sbuf:Counter ?node .
+  ?node rdf:value ?val .
+  Bind( (?val + 1) AS ?newval)
 }

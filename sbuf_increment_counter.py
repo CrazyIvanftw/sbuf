@@ -4,46 +4,42 @@ import httplib2
 import json
 from datetime import datetime
 
-# This script simply inserts a string with a with the timestamp when this
-# script was run into the databse. After the inser, it will then send a
-# follow-up query to the databse requesting all timestamps in the databse.
-# the script will display the results of the timestamp query for testing.
-# Every time this script is run, it should add a new timestamp without
-# overwriting any old ones. 
-
-
-# Create a timestamp when this script runs
-now = datetime.now()
-timestamp = datetime.timestamp(now)
-test_string = 'This is only a test at: %s.' % datetime.fromtimestamp(timestamp)
+# This updates the value of the default counter (incriment the current value in
+# the databse by 1) and then sends a query that requests the value of the counter.
+# If run several times, you should see that the value returned by the database
+# incriments. 
 
 # The url of the database as well as the repository id
-# IMPORTANT: Queries and Updates do not go to the same url!
-repository = 'sbuf'
-url = 'http://localhost:8080/rdf4j-server/repositories/%s' % (repository)
-update_url = 'http://localhost:8080/rdf4j-server/repositories/%s/statements' % (repository)
+repository = 'sbuf' #this is the repository id
+url = 'http://localhost:8080/rdf4j-server/repositories/%s' % (repository) #this is where simple queries go
+update_url = 'http://localhost:8080/rdf4j-server/repositories/%s/statements' % (repository) #this is where updates go (anything that alters the state of the database)
 
-# The SPARQL command to update the database
+# The SPARQL Command that the databse should execute
 update = '''PREFIX sbuf: <http://sbuf.org/grasshopper#>
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
             PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-            INSERT DATA {
-                sbuf:Test sbuf:InsertTest [rdf:value "%s"^^xsd:string].
-            } ''' % (test_string)
+            WITH <sbuf:GrasshopperConfigurations>
+            DELETE { ?node rdf:value ?val }
+            INSERT { ?node rdf:value ?newval }
+            WHERE {
+                sbuf:Default sbuf:Counter ?node .
+                ?node rdf:value ?val .
+                Bind( (?val + 1) AS ?newval)
+            }  '''
 
-# Print the url before sending for debugging purposes
+# When the script get's this far, it will print out the url for debugging
 print('POSTing SPARQL update to %s' % (update_url))
 
-# construct the HTTP POST request with the SPARQL update inbedded in it.
+# Construct the HTTP POST request to be sent to the databse
 params1 = { 'update' : update }
 headers = { 'content-type' : 'application/x-www-form-urlencoded',
             'accept' : 'application/sparql-results+json' }
 
-# Send and wait for http response from the database
+# Send HTTP request, wait for response
 (response1, content1) = httplib2.Http().request(update_url, 'POST', urllib.parse.urlencode(params1), headers=headers)
 
-#Print out the response code (204 means the SPARQL statement ran without issues)
+# Prind the response code of the HTTP request (204 means the SPARQL statement ran without issues)
 print('Update Status %s' % (response1.status))
 
 # New SPARQL Query: We want to see if the update actually worked or if there
@@ -55,9 +51,9 @@ query = ''' PREFIX sbuf: <http://sbuf.org/grasshopper#>
             PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
             SELECT ?val
             WHERE {
-              sbuf:Test sbuf:InsertTest [rdf:value ?val].
+              sbuf:Default sbuf:Counter ?node .
+              ?node rdf:value ?val
             }'''
-
 
 # When the script get's this far, it will print out the ure it will send the query to.
 # IMPORTANT: Quiries and Updates do not go to the same url.
@@ -68,6 +64,7 @@ params2 = { 'query' : query }
 
 # Send HTTP POST query request to the database and wait for response.
 (response2, content2) = httplib2.Http().request(url, 'POST', urllib.parse.urlencode(params2), headers=headers)
+
 
 # Print out the status code for the response from the database (200 means that there is data returned with the response)
 print('Query Status %s' % (response2.status))
