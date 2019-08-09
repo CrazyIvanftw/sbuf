@@ -54,13 +54,14 @@ def sparql_insert_list_params(data):
     '''
     last = "\n\t} \n}"
     statement = prefix
-    counter = 1
+    #counter = 1
     for target in data:
-        if counter == len(data):
-            statement = statement + target + " .\n"
-        else:
-            statement = statement + target + " ;\n"
-        counter = counter + 1
+        statement = statement + target + " .\n"
+        #if counter == len(data):
+        #    statement = statement + target + " .\n"
+        #else:
+        #    statement = statement + target + " ;\n"
+        #counter = counter + 1
     statement = statement + last
     return statement
 
